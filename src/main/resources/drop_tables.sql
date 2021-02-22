@@ -1,1 +1,1 @@
-DROP table groups, students, courses;
+DROP table groups, students, courses, students_courses;
