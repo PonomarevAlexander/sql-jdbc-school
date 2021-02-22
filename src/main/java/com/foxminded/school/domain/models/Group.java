@@ -2,30 +2,30 @@ package com.foxminded.school.domain.models;
 
 public class Group {
     
-    private int groupID;
-    private String groupName;
+    private int id;
+    private String name;
     private int groupSize;
     
     public Group(String groupName) {
-        this.groupName = groupName;
+        this.name = groupName;
     }
     
     public Group() {}
     
     public int getGroupID() {
-        return groupID;
+        return id;
     }
     
     public void setGroupID(int groupID) {
-        this.groupID = groupID;
+        this.id = groupID;
     }
     
     public String getGroupName() {
-        return groupName;
+        return name;
     }
     
     public void setGroupName(String groupName) {
-        this.groupName = groupName;
+        this.name = groupName;
     }
 
     public int getGroupSize() {

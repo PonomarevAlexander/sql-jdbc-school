@@ -4,8 +4,8 @@ import java.util.Set;
 
 public class Student {
 
-    private int studentID;
-    private String firstName;
+    private int id;
+    private String name;
     private String lastName;
     private int groupId;
     private Set<Integer> courses;
@@ -13,16 +13,16 @@ public class Student {
     public Student() {}
     
     public Student(String firstName, String lastName) {
-        this.firstName = firstName;
+        this.name = firstName;
         this.lastName = lastName;
     }
     
     public int getStudentID() {
-        return studentID; 
+        return id; 
     }
 
     public String getFirstName() {
-        return firstName;
+        return name;
     }
 
     public String getLastName() {
@@ -30,11 +30,11 @@ public class Student {
     }
 
     public void setStudentID(int studentID) {
-        this.studentID = studentID;
+        this.id = studentID;
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.name = firstName;
     }
 
     public void setLastName(String lastName) {

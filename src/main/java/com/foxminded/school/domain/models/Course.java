@@ -2,28 +2,28 @@ package com.foxminded.school.domain.models;
 
 public class Course {
     
-    private int courseID;
-    private String courseName;
+    private int id;
+    private String name;
     private String courseDescription;
     
     public Course() {}
     
     public Course(String courseName) {
-        this.courseName = courseName;
+        this.name = courseName;
     }
     
     public Course(int courseID, String courseName, String courseDescription) {
-        this.courseID = courseID;
-        this.courseName = courseName;
+        this.id = courseID;
+        this.name = courseName;
         this.courseDescription = courseDescription;
     }
 
     public int getCourseID() {
-        return courseID;
+        return id;
     }
 
     public String getCourseName() {
-        return courseName;
+        return name;
     }
 
     public String getCourseDescription() {
@@ -31,11 +31,11 @@ public class Course {
     }
 
     public void setCourseID(int courseID) {
-        this.courseID = courseID;
+        this.id = courseID;
     }
 
     public void setCourseName(String courseName) {
-        this.courseName = courseName;
+        this.name = courseName;
     }
 
     public void setCourseDescription(String courseDescription) {
