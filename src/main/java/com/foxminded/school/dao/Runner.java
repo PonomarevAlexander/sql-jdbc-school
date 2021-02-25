@@ -9,10 +9,14 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 
 public class Runner {
     
-    ConnectionController controller = new ConnectionController();
-    
+    ConnectionHandler handler;
+
+    public Runner(ConnectionHandler handler) {
+        this.handler = handler;
+    }
+
     public void executeScript(String url) {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         ScriptRunner runner = new ScriptRunner(connection);
         try (BufferedReader reader = new BufferedReader(new FileReader(url))) {
             runner.runScript(reader);
