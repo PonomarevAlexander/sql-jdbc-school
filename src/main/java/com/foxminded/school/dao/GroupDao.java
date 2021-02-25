@@ -14,12 +14,17 @@ import com.foxminded.school.domain.models.Group;
 
 public class GroupDao implements Dao<Group, List<Group>> {
     
-    ConnectionController controller = new ConnectionController();
+    ConnectionHandler handler;
+    
+    public GroupDao(ConnectionHandler handler) {
+        this.handler = handler;
+    }
+    
     private static final String QUERY_INSERT_GROUP_NAME = "INSERT into groups(group_name) values(?)";
     private static final String QUERY_SELECT_ALL = "SELECT * from groups";
     private static final String QUERY_SELECT_BY_ID = "SELECT * from groups where group_id = ?";
     private static final String QUERY_UPDATE_NAME = "UPDATE groups SET group_name = ? WHERE group_id = ?";
-    private static final String QUERY_DELETE_BY_ID = "DELETE FROM groups WHERE id = ?";
+    private static final String QUERY_DELETE_BY_ID = "DELETE FROM groups WHERE group_id = ?";
     private static final String QUERY_STUDENTS_COUNT_IN_GROUP = "SELECT group_name, COUNT(group_id) FROM students JOIN groups USING(group_id) GROUP BY group_name";
     private static final String COLUMN_GROUP_NAME = "group_name";
     private static final String COLUMN_GROUP_ID = "group_id";
@@ -33,7 +38,7 @@ public class GroupDao implements Dao<Group, List<Group>> {
     
     @Override
     public void add(Group entity) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_GROUP_NAME)){
             statement.setString(1, entity.getGroupName());
             statement.execute();
@@ -50,7 +55,7 @@ public class GroupDao implements Dao<Group, List<Group>> {
 
     @Override
     public List<Group> getAll() throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         ResultSet resultSet = null;
         List<Group> groupsList = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
@@ -78,7 +83,7 @@ public class GroupDao implements Dao<Group, List<Group>> {
 
     @Override
     public Group getById(int id) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         ResultSet resultSet = null;
         Group group = new Group();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_BY_ID)) {
@@ -105,7 +110,7 @@ public class GroupDao implements Dao<Group, List<Group>> {
 
     @Override
     public void update(Group entity) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_NAME)) {
             statement.setString(1, entity.getGroupName());
             statement.setInt(2, entity.getGroupID());
@@ -123,7 +128,7 @@ public class GroupDao implements Dao<Group, List<Group>> {
 
     @Override
     public void remove(Group entity) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
             statement.setInt(1, entity.getGroupID());
             statement.execute();
@@ -140,7 +145,7 @@ public class GroupDao implements Dao<Group, List<Group>> {
     
     @Override
     public void remove(int id) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
             statement.setInt(1, id);
             statement.execute();
@@ -156,7 +161,7 @@ public class GroupDao implements Dao<Group, List<Group>> {
     }
     
     public Map<String, Integer> getCountStudentsIntoGroups() throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         ResultSet resultSet = null;
         Map<String, Integer> resultCount = new HashMap<>();
         try (Statement statement = connection.createStatement()) {

@@ -15,8 +15,12 @@ import com.foxminded.school.domain.models.Student;
 
 public class StudentDao implements Dao<Student, List<Student>> {
     
-    ConnectionController controller = new ConnectionController();
+    ConnectionHandler handler;
     
+    public StudentDao(ConnectionHandler handler) {
+        this.handler = handler;
+    }
+
     private static final String QUERY_INSERT_STUDENT = "INSERT INTO students(first_name, last_name, group_id) values(?, ?, ?)";
     private static final String QUERY_INSERT_COURSE = "INSERT INTO students_courses(student_id, course_id) VALUES(?, ?)";    
     private static final String QUERY_SELECT_ALL_STUDENTS = "SELECT * FROM students";
@@ -44,7 +48,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
     
     @Override
     public void add(Student entity) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_STUDENT)){
             statement.setString(1, entity.getFirstName());
             statement.setString(2, entity.getLastName());
@@ -63,7 +67,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
 
     @Override
     public List<Student> getAll() throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         ResultSet resultSet = null;
         List<Student> studentsList = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
@@ -93,7 +97,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
 
     @Override
     public Student getById(int id) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         ResultSet resultSet = null;
         Student student = new Student();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_BY_ID)) {
@@ -104,7 +108,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
                 student.setLastName(resultSet.getString(COLUMN_LAST_NAME));
                 student.setStudentID(resultSet.getInt(COLUMN_STUDENT_ID));
                 student.setGroupId(resultSet.getInt(COLUMN_GROUP_ID));
-                
+                student.setCourses(getStudentCourses(id));
             }
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_GET_BY_ID, e);
@@ -123,7 +127,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
 
     @Override
     public void update(Student entity) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_STUDENT)) {
             statement.setString(1, entity.getFirstName());
             statement.setString(2, entity.getLastName());
@@ -134,7 +138,6 @@ public class StudentDao implements Dao<Student, List<Student>> {
             throw new DaoException(EXCEPTION_UPDATE, e);
             
         }
-        
         for (Integer course : entity.getCourses()) {
             try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_COURSE)) {
                 statement.setInt(1, entity.getStudentID());
@@ -155,7 +158,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
 
     @Override
     public void remove(Student entity) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
             statement.setInt(1, entity.getStudentID());
             statement.execute();
@@ -172,7 +175,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
 
     @Override
     public void remove(int id) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
             statement.setInt(1, id);
             statement.execute();
@@ -188,7 +191,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
     }
     
     public void remove(String name, String lastName) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_FULL_NAME)) {
             statement.setString(1, name);
             statement.setString(2, lastName);
@@ -205,7 +208,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
     }
     
     public List<Student> getStudentsWithGivenCourse(Course course) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         ResultSet resultSet = null;
         List<Student> resultList = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_STUDENTS_BY_COURSE)) {
@@ -229,11 +232,12 @@ public class StudentDao implements Dao<Student, List<Student>> {
                 e1.getStackTrace();
             }
         }
+        
         return resultList;
     }
     
-    public void addCourses(Student student) throws DaoException {
-        Connection connection = controller.getConnection();
+    public void addCourseSet(Student student) throws DaoException {
+        Connection connection = handler.getConnection();
         for (Integer courseId : student.getCourses()) {
             try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_COURSE)) {
                 statement.setInt(1, student.getStudentID());
@@ -253,7 +257,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
     }
     
     public void removeFromCourse(int studentId, int courseId) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_FROM_COURSE)) {
             statement.setInt(1, studentId);
             statement.setInt(2, courseId);
@@ -270,7 +274,7 @@ public class StudentDao implements Dao<Student, List<Student>> {
     }
     
     public Set<Integer> getStudentCourses(int studentId) throws DaoException {
-        Connection connection = controller.getConnection();
+        Connection connection = handler.getConnection();
         ResultSet resultSet = null;
         Set<Integer> courses = new HashSet<>();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_STUDENT_COURSES)) {
