@@ -4,16 +4,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConnectionController {
+public class ConnectionHandler {
     
-    private static final String URL = "jdbc:postgresql://localhost:5432/school";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "1234";
+    private String url;
+    private String user;
+    private String pwd;
     
+    public ConnectionHandler(String url, String user, String pwd) {
+        this.url = url;
+        this.user = user;
+        this.pwd = pwd;
+    }
+
     public Connection getConnection() {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            connection = DriverManager.getConnection(url, user, pwd);
         } catch (SQLException e) {
             e.printStackTrace();            
         }
