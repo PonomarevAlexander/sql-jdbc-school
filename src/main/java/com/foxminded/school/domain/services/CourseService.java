@@ -3,13 +3,18 @@ package com.foxminded.school.domain.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.foxminded.school.dao.ConnectionHandler;
 import com.foxminded.school.dao.CourseDao;
 import com.foxminded.school.dao.DaoException;
 import com.foxminded.school.domain.models.Course;
 
 public class CourseService implements Service<Course, List<Course>> {
     
-    CourseDao courseDao = new CourseDao();
+    private static final String URL = "jdbc:postgresql://localhost:5432/school";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "1234";
+    
+    CourseDao courseDao = new CourseDao(new ConnectionHandler(URL, USER, PASSWORD));
 
     @Override
     public void add(Course entity) {

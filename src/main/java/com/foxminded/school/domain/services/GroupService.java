@@ -6,13 +6,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.foxminded.school.dao.ConnectionHandler;
 import com.foxminded.school.dao.DaoException;
 import com.foxminded.school.dao.GroupDao;
 import com.foxminded.school.domain.models.Group;
 
-public class GroupService implements Service<Group, List<Group>>{
+public class GroupService implements Service<Group, List<Group>> {
     
-    private GroupDao groupDao = new GroupDao();
+    private static final String URL = "jdbc:postgresql://localhost:5432/school";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "1234";
+    
+    private GroupDao groupDao = new GroupDao(new ConnectionHandler(URL, USER, PASSWORD));
     
     @Override
     public void add(Group group) {
