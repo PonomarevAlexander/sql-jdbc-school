@@ -6,7 +6,7 @@ public interface Service<T, E> {
     
     E getAll();
     
-    T get(int id);
+    T getById(int id);
     
     void edit(T entity);
     
