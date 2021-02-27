@@ -10,11 +10,11 @@ import com.foxminded.school.domain.models.Course;
 
 public class CourseService implements Service<Course, List<Course>> {
     
-    private static final String URL = "jdbc:postgresql://localhost:5432/school";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "1234";
+    CourseDao courseDao;
     
-    CourseDao courseDao = new CourseDao(new ConnectionHandler(URL, USER, PASSWORD));
+    public CourseService(ConnectionHandler handler) {
+        this.courseDao = new CourseDao(handler);
+    }
 
     @Override
     public void add(Course entity) {
@@ -37,7 +37,7 @@ public class CourseService implements Service<Course, List<Course>> {
     }
 
     @Override
-    public Course get(int id) {
+    public Course getById(int id) {
         Course course = new Course();
         try {
             course = courseDao.getById(id);

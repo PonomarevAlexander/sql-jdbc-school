@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.foxminded.school.dao.ConnectionHandler;
 import com.foxminded.school.dao.DaoException;
+import com.foxminded.school.dao.GroupDao;
 import com.foxminded.school.dao.StudentDao;
 import com.foxminded.school.domain.ConsoleFormatter;
 import com.foxminded.school.domain.models.Course;
@@ -14,11 +15,11 @@ import com.foxminded.school.domain.models.Student;
 
 public class StudentService implements Service<Student, List<Student>> {
     
-    private static final String URL = "jdbc:postgresql://localhost:5432/school";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "1234";
+    private StudentDao studentDao;
 
-    private StudentDao studentDao = new StudentDao(new ConnectionHandler(URL, USER, PASSWORD));
+    public StudentService(ConnectionHandler handler) {
+        this.studentDao = new StudentDao(handler);
+    }
 
     @Override
     public void add(Student entity) {
@@ -48,7 +49,7 @@ public class StudentService implements Service<Student, List<Student>> {
     }
 
     @Override
-    public Student get(int id) {
+    public Student getById(int id) {
         Student student = new Student();
         try {
             student = studentDao.getById(id);

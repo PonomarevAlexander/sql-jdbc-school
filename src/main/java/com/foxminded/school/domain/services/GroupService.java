@@ -14,11 +14,11 @@ import com.foxminded.school.domain.models.Group;
 
 public class GroupService implements Service<Group, List<Group>> {
     
-    private static final String URL = "jdbc:postgresql://localhost:5432/school";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "1234";
-    
-    private GroupDao groupDao = new GroupDao(new ConnectionHandler(URL, USER, PASSWORD));
+    private GroupDao groupDao;
+
+    public GroupService(ConnectionHandler handler) {
+        this.groupDao = new GroupDao(handler);
+    }
     
     @Override
     public void add(Group group) {
@@ -30,7 +30,7 @@ public class GroupService implements Service<Group, List<Group>> {
     }
     
     @Override
-    public Group get(int id) {
+    public Group getById(int id) {
         Group group = new Group();
         try {
             group = groupDao.getById(id);
