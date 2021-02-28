@@ -1,1 +1,1 @@
-DROP table groups, students, courses, students_courses;
+DROP table IF EXISTS groups, students, courses, students_courses CASCADE;
