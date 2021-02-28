@@ -10,16 +10,16 @@ public class CourseFactory implements ModelFactory<List<Course>> {
     @Override
     public List<Course> generate(int counter) {
         List<Course> coursesList = new ArrayList<>();
-        coursesList.add(new Course("Astronomy"));
-        coursesList.add(new Course("Charms"));
-        coursesList.add(new Course("dark arts"));
-        coursesList.add(new Course("defence against the dark arts"));
-        coursesList.add(new Course("herbology"));
-        coursesList.add(new Course("history of magic"));
-        coursesList.add(new Course("potions"));
-        coursesList.add(new Course("transfiguration"));
-        coursesList.add(new Course("alchemy"));
-        coursesList.add(new Course("divination"));
+        coursesList.add(new Course("Algebra"));
+        coursesList.add(new Course("Literature"));
+        coursesList.add(new Course("History"));
+        coursesList.add(new Course("Physics"));
+        coursesList.add(new Course("Music"));
+        coursesList.add(new Course("Biology"));
+        coursesList.add(new Course("Geography"));
+        coursesList.add(new Course("Drawing"));
+        coursesList.add(new Course("English"));
+        coursesList.add(new Course("Science"));
         return coursesList;
     }
 
