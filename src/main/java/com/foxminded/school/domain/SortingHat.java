@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import com.foxminded.school.dao.ConnectionController;
+
+import com.foxminded.school.dao.ConnectionHandler;
 import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Group;
 import com.foxminded.school.domain.models.Student;
@@ -13,10 +14,13 @@ import com.foxminded.school.domain.services.StudentService;
 
 public class SortingHat {
     
+    private static final String URL = "jdbc:postgesql://localhost:5432/school";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "1234";
+    
     Random random = new Random();
-    StudentService studentService = new StudentService();
-    CourseService courseService = new CourseService();
-    ConnectionController controller = new ConnectionController();
+    StudentService studentService = new StudentService(new ConnectionHandler(URL, USER, PASSWORD));
+    CourseService courseService = new CourseService(new ConnectionHandler(URL, USER, PASSWORD));
     
     public void sortToGroup(List<Student> students, List<Group> groups) {
         groups.forEach(group -> {
@@ -35,7 +39,6 @@ public class SortingHat {
                 indexCount++;
             }
         }
-        
     }
     
     public void assignToCourses(List<Student> students, List<Course> courses) {
