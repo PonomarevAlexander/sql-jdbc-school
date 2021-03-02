@@ -1,17 +1,22 @@
 package com.foxminded.school.domain.services;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import com.foxminded.school.dao.ConnectionHandler;
+import com.foxminded.school.dao.CourseDao;
+import com.foxminded.school.dao.DaoException;
 import com.foxminded.school.dao.Runner;
 import com.foxminded.school.domain.models.Course;
 
+@ExtendWith(MockitoExtension.class)
 class CourseServiceTest {
 
     CourseService courseService;
@@ -25,6 +30,18 @@ class CourseServiceTest {
     private static final String NAME_2 = "history";
     private static final String NAME_3 = "biology";
     
+    @Mock
+    CourseDao mockedDao;
+    
+    @Mock
+    ConnectionHandler mockedHandler;
+    
+    @Mock
+    Course mockedCourse;
+    
+    @InjectMocks
+    CourseService mockedService = new CourseService(mockedHandler);
+
     @BeforeEach
     void init() {
         runner = new Runner(new ConnectionHandler(URL, USER, PASSWORD));
@@ -104,4 +121,75 @@ class CourseServiceTest {
         assertEquals(2, initialList.size());
         assertEquals(1, actualList.size());
     }
+    
+    @Test
+    void testAddTimesInvoke() {
+        mockedService.add(mockedCourse);
+        try {
+            verify(mockedDao).add(mockedCourse);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    void testGetAllTimesInvoke() {
+        mockedService.getAll();
+        try {
+            verify(mockedDao).getAll();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    void testGetByIdTimesInvoke() {
+        mockedService.getById(anyInt());
+        try {
+            verify(mockedDao).getById(anyInt());
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    void testEditTimesInvoke() {
+        mockedService.edit(mockedCourse);
+        try {
+            verify(mockedDao).update(mockedCourse);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    void testRemoveByIdTimesInvoke() {
+        mockedService.remove(anyInt());
+        try {
+            verify(mockedDao).remove(anyInt());
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    void testRemoveByEntityTimesInvoke() {
+        mockedService.remove(mockedCourse);
+        try {
+            verify(mockedDao).remove(mockedCourse);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    void testGetByNameTimesInvoke() {
+        mockedService.getbyName(anyString());
+        try {
+            verify(mockedDao).getByName(anyString());
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
+    
 }
