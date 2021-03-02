@@ -51,9 +51,11 @@ public class StudentService implements Service<Student, List<Student>> {
     @Override
     public Student getById(int id) {
         Student student = new Student();
+        Set<Integer> courses = new HashSet<>();
         try {
             student = studentDao.getById(id);
-            student.setCourses(getStudentCourses(student));
+            courses = studentDao.getStudentCourses(student.getStudentID());
+            student.setCourses(courses);
         } catch (DaoException e) {
             e.printStackTrace();
         }
@@ -123,7 +125,6 @@ public class StudentService implements Service<Student, List<Student>> {
     }
     
     public Set<Integer> getStudentCourses(Student student) {
-        
         Set<Integer> courses = new HashSet<>();
         try {
             courses = studentDao.getStudentCourses(student.getStudentID());
