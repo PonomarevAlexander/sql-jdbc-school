@@ -7,12 +7,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
+import com.foxminded.school.domain.DBConfigDto;
+
 public class Runner {
     
     ConnectionHandler handler;
 
-    public Runner(ConnectionHandler handler) {
-        this.handler = handler;
+    public Runner(DBConfigDto config) {
+        this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
     }
 
     public void executeScript(String url) {
