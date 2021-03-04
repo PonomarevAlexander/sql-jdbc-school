@@ -4,10 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Group;
 
@@ -139,3 +137,26 @@ class GroupDaoTest {
         assertEquals(1, updatedGroupsList.size());
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

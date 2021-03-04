@@ -2,18 +2,17 @@ package com.foxminded.school.domain.services;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.foxminded.school.dao.ConnectionHandler;
 import com.foxminded.school.dao.CourseDao;
 import com.foxminded.school.dao.DaoException;
+import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Course;
 
 public class CourseService implements Service<Course, List<Course>> {
     
-    CourseDao courseDao;
+    private CourseDao courseDao;
     
-    public CourseService(ConnectionHandler handler) {
-        this.courseDao = new CourseDao(handler);
+    public CourseService(DBConfigDto config) {
+        this.courseDao = new CourseDao(config);
     }
 
     @Override

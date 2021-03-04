@@ -16,36 +16,42 @@ import com.foxminded.school.dao.*;
 public class Main {
 
     public static void main(String[] args) {
-        Runner runner = new Runner();
-        GroupFactory groupFactory = new GroupFactory();
-        GroupService groupService = new GroupService();
-        StudentFactory studentFactory = new StudentFactory();
-        StudentService studentService = new StudentService();
-        CourseFactory courseFactory = new CourseFactory();
-        CourseService courseService = new CourseService();
-        SortingHat sortingHat = new SortingHat();
-        OptionMenu menu = new OptionMenu();
-        Scanner scanner = new Scanner(System.in);
-
         
-        runner.executeScript("src\\main\\resources\\create_tables_script.sql");
+        String url = "jdbc:postgresql://localhost:5432/school";
+        String user = "postgres";
+        String password = "1234";
+        String create = "src\\main\\resources\\create_tables_script.sql";
+        String drop = "src\\main\\resources\\drop_tables.sql";
+        
+        DBConfigDto config = new DBConfigDto(url, user, password);
+        Runner runner = new Runner(config);
+        GroupFactory groupFactory = new GroupFactory();
+        CourseFactory courseFactory = new CourseFactory();
+        StudentFactory studentFactory = new StudentFactory();
+        GroupService groupService = new GroupService(config);
+        StudentService studentService = new StudentService(config);
+        CourseService courseService = new CourseService(config);
+        SortingHat sortingHat = new SortingHat();
+        OptionMenu menu = new OptionMenu(studentService, courseService, groupService);
+        Scanner scanner = new Scanner(System.in);
+ 
+        runner.executeScript(drop);
+        runner.executeScript(create);
         
         groupFactory.generate(10).forEach(group -> groupService.add(group));
         studentFactory.generate(200).forEach(student -> studentService.add(student));
         courseFactory.generate(10).forEach(course -> courseService.add(course));
         
         List<Group> groupList = groupService.getAll(); 
-        List<Student> studentList =studentService.getAll(); 
+        List<Student> studentList = studentService.getAll(); 
         List<Course> courseList = courseService.getAll();
         
         sortingHat.sortToGroup(studentList, groupList);
         sortingHat.assignToCourses(studentList, courseList);
         studentList.forEach(student -> studentService.edit(student));
         
-        menu.showMainMenu();
-        menu.menuItems(scanner.nextInt());
+        System.out.println(menu.showMainMenu());
+        System.out.println(menu.menuEngine(scanner.nextInt()));
         scanner.close();
-        
-        runner.executeScript("src\\main\\resources\\drop_tables.sql");
     }
 }

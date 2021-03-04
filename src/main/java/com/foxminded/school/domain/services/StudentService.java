@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.foxminded.school.dao.ConnectionHandler;
 import com.foxminded.school.dao.DaoException;
-import com.foxminded.school.dao.GroupDao;
 import com.foxminded.school.dao.StudentDao;
 import com.foxminded.school.domain.ConsoleFormatter;
+import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Student;
 
@@ -17,8 +15,8 @@ public class StudentService implements Service<Student, List<Student>> {
     
     private StudentDao studentDao;
 
-    public StudentService(ConnectionHandler handler) {
-        this.studentDao = new StudentDao(handler);
+    public StudentService(DBConfigDto config) {
+        studentDao = new StudentDao(config);
     }
 
     @Override
