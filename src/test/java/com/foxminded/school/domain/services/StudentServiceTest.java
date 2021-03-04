@@ -2,11 +2,8 @@ package com.foxminded.school.domain.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,15 +15,16 @@ import com.foxminded.school.dao.DaoException;
 import com.foxminded.school.dao.Runner;
 import com.foxminded.school.dao.StudentDao;
 import com.foxminded.school.domain.ConsoleFormatter;
+import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Student;
 
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
 
-    StudentService studentService;
+    private StudentService studentService;
     private Runner runner;
-    List<Student> stubList = new ArrayList<>();
+    private DBConfigDto config = new DBConfigDto(URL, USER, PASSWORD);
     private static final String URL = "jdbc:h2:~/test";
     private static final String USER = "alex";
     private static final String PASSWORD = "";
@@ -55,23 +53,19 @@ class StudentServiceTest {
     ConsoleFormatter mockedFormatter;
    
     @InjectMocks
-    StudentService mockedService = new StudentService(mockedHandler);
+    StudentService mockedService = new StudentService(config);
     
     
     @BeforeEach
     void init() {
-        runner = new Runner(new ConnectionHandler(URL, USER, PASSWORD));
+        runner = new Runner(config);
+        runner.executeScript(DROP_TABLES);
         runner.executeScript(CREATE_TABLES);
-        studentService = new StudentService(new ConnectionHandler(URL, USER, PASSWORD));
+        studentService = new StudentService(config);
         studentService.add(NAME_1, LAST_NAME_1);
         studentService.add(NAME_2, LAST_NAME_2);
     }
-    
-    @AfterEach
-    void deleteTables() {
-        runner.executeScript(DROP_TABLES);
-    }
-    
+
     @Test
     void testAdd() {
         studentService.add(new Student(NAME_3, LAST_NAME_3));

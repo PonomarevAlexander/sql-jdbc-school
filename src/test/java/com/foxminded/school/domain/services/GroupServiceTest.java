@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,12 +14,14 @@ import com.foxminded.school.dao.ConnectionHandler;
 import com.foxminded.school.dao.DaoException;
 import com.foxminded.school.dao.GroupDao;
 import com.foxminded.school.dao.Runner;
+import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Group;
 
 @ExtendWith(MockitoExtension.class)
 class GroupServiceTest {
 
-    GroupService groupService;
+    private GroupService groupService;
+    private DBConfigDto config = new DBConfigDto(URL, USER, PASSWORD);
     private Runner runner;
     private static final String URL = "jdbc:h2:~/test";
     private static final String USER = "alex";
@@ -41,23 +42,19 @@ class GroupServiceTest {
     Group mockedGroup;
     
     @InjectMocks
-    GroupService mockedService = new GroupService(mockedHandler);
+    GroupService mockedService = new GroupService(config);
     
     @BeforeEach
     void init() {
-        runner = new Runner(new ConnectionHandler(URL, USER, PASSWORD));
+        runner = new Runner(config);
+        runner.executeScript(DROP_TABLES);
         runner.executeScript(CREATE_TABLES);
-        groupService = new GroupService(new ConnectionHandler(URL, USER, PASSWORD));
+        groupService = new GroupService(config);
         groupService.add(new Group(GROUP_NAME_1));
         groupService.add(new Group(GROUP_NAME_2));
         
     }
-    
-    @AfterEach
-    void deleteTables() {
-        runner.executeScript(DROP_TABLES);
-    }
-    
+
     @Test
     void testAdd() {
         Group actual = new Group();
