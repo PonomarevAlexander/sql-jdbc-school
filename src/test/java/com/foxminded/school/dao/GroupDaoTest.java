@@ -7,11 +7,14 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Group;
 
 class GroupDaoTest {
     
     private GroupDao groupDao;
+    private DBConfigDto config = new DBConfigDto(URL, USER, PASSWORD);
     private static Runner runner;
     private static final String URL = "jdbc:h2:~/test";
     private static final String USER = "alex";
@@ -23,16 +26,12 @@ class GroupDaoTest {
     
     @BeforeEach
     void init() {
-        groupDao = new GroupDao(new ConnectionHandler(URL, USER, PASSWORD));
-        runner = new Runner(new ConnectionHandler(URL, USER, PASSWORD));
+        groupDao = new GroupDao(config);
+        runner = new Runner(config);
+        runner.executeScript(DROP_TABLES);
         runner.executeScript(CREATE_TABLES);
     }
-    
-    @AfterEach
-    void deleteTables() {
-        runner.executeScript(DROP_TABLES);
-    }
-    
+
     @Test
     void testAdd() {
         Group group = new Group(GROUP_NAME_1);

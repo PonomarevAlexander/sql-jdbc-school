@@ -10,12 +10,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Course;
 
 class CourseDaoTest {
 
     private CourseDao courseDao;
     private static Runner runner;
+    private DBConfigDto config = new DBConfigDto(URL, USER, PASSWORD);
     private static final String URL = "jdbc:h2:~/test";
     private static final String USER = "alex";
     private static final String PASSWORD = "";
@@ -28,8 +30,9 @@ class CourseDaoTest {
     
     @BeforeEach
     void init() {
-        courseDao = new CourseDao(new ConnectionHandler(URL, USER, PASSWORD));
-        runner = new Runner(new ConnectionHandler(URL, USER, PASSWORD));
+        courseDao = new CourseDao(config);
+        runner = new Runner(config);
+        runner.executeScript(DROP_TABLES);
         runner.executeScript(CREATE_TABLES);
         try {
             courseDao.add(new Course(COURSE_NAME_1));
@@ -38,12 +41,7 @@ class CourseDaoTest {
             e.printStackTrace();
         }
     }
-    
-    @AfterEach
-    void deleteTables() {
-        runner.executeScript(DROP_TABLES);
-    }
-    
+
     @Test
     void testAdd() {
         Course actual = new Course();

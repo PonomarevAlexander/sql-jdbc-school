@@ -1,3 +1,4 @@
+
 package com.foxminded.school.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,11 +13,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.foxminded.school.domain.DBConfigDto;
+import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Student;
 
 class StudentDaoTest {
 
     private StudentDao studentDao;
+    private CourseDao courseDao;
+    private DBConfigDto config = new DBConfigDto(URL, USER, PASSWORD);
     private static Runner runner;
     private static final String URL = "jdbc:h2:~/test";
     private static final String USER = "alex";
@@ -28,14 +33,11 @@ class StudentDaoTest {
     
     @BeforeEach
     void init() {
-        studentDao = new StudentDao(new ConnectionHandler(URL, USER, PASSWORD));
-        runner = new Runner(new ConnectionHandler(URL, USER, PASSWORD));
-        runner.executeScript(CREATE_TABLES);
-    }
-    
-    @AfterEach
-    void deleteTables() {
+        studentDao = new StudentDao(config);
+        courseDao = new CourseDao(config);
+        runner = new Runner(config);
         runner.executeScript(DROP_TABLES);
+        runner.executeScript(CREATE_TABLES);
     }
     
     @Test
@@ -148,22 +150,30 @@ class StudentDaoTest {
      @Test
      void testAddCourseSet() {
          Student actual = new Student();
-         Set<Integer> coursesId = new HashSet<>();
-         coursesId.add(1);
-         coursesId.add(3);
-         coursesId.add(5);
+         Student student = new Student();
+         Set<Integer> courses = new HashSet<>();
+         courses.add(1);
+         courses.add(2);
+         courses.add(3);
+         try {
+            courseDao.add(new Course("foo"));
+            courseDao.add(new Course("bar"));
+            courseDao.add(new Course("baz"));
+        } catch (DaoException e1) {
+            e1.printStackTrace();
+        }
          try {
              studentDao.add(new Student(TEST_NAME_1, TEST_NAME_2));
              actual = studentDao.getById(1);
-             actual.setCourses(coursesId);
+             actual.setCourses(courses);
              studentDao.addCourseSet(actual);
-             actual = studentDao.getById(1);
+             student = studentDao.getById(1);
          } catch (DaoException e) {
              e.printStackTrace();
          }
-         assertEquals(TEST_NAME_1, actual.getFirstName());
-         assertEquals(TEST_NAME_2, actual.getLastName());
-         assertEquals(1, actual.getStudentID());
-         assertTrue(actual.getCourses().containsAll(coursesId));
+         assertEquals(TEST_NAME_1, student.getFirstName());
+         assertEquals(TEST_NAME_2, student.getLastName());
+         assertEquals(1, student.getStudentID());
+         assertTrue(student.getCourses().containsAll(courses));
      }
 }
