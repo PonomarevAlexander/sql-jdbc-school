@@ -7,14 +7,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Course;
 
 public class CourseDao implements Dao<Course, List<Course>> {
 
-    ConnectionHandler handler;
+    private ConnectionHandler handler;
     
-    public CourseDao(ConnectionHandler handler) {
-        this.handler = handler;
+    public CourseDao(DBConfigDto config) {
+        this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
     }
 
     private static final String QUERY_INSERT = "INSERT INTO courses(course_name, course_description) VALUES(?, ?)";

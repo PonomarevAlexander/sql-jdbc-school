@@ -10,16 +10,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Student;
 
 public class StudentDao implements Dao<Student, List<Student>> {
     
-    ConnectionHandler handler;
+private ConnectionHandler handler;
     
-    public StudentDao(ConnectionHandler handler) {
-        this.handler = handler;
-    }
+public StudentDao(DBConfigDto config) {
+    this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
+}
 
     private static final String QUERY_INSERT_STUDENT = "INSERT INTO students(first_name, last_name, group_id) values(?, ?, ?)";
     private static final String QUERY_INSERT_COURSE = "INSERT INTO students_courses(student_id, course_id) VALUES(?, ?)";    
@@ -238,22 +239,22 @@ public class StudentDao implements Dao<Student, List<Student>> {
     
     public void addCourseSet(Student student) throws DaoException {
         Connection connection = handler.getConnection();
-        for (Integer courseId : student.getCourses()) {
-            try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_COURSE)) {
-                statement.setInt(1, student.getStudentID());
+        int id = student.getStudentID();
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_COURSE)) {
+            for (Integer courseId : student.getCourses()) {
+                statement.setInt(1, id);
                 statement.setInt(2, courseId);
                 statement.execute();
-            } catch (SQLException e) {
-                throw new DaoException(EXCEPTION_ADD_COURSE, e);
-            } finally {
-                try {
-                    connection.close();
-                } catch (SQLException e1) {
-                    e1.getStackTrace();
-                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException(EXCEPTION_ADD_COURSE, e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.getStackTrace();
             }
         }
-        
     }
     
     public void removeFromCourse(int studentId, int courseId) throws DaoException {

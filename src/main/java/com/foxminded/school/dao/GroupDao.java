@@ -10,14 +10,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Group;
 
 public class GroupDao implements Dao<Group, List<Group>> {
+
+    private ConnectionHandler handler;
     
-    ConnectionHandler handler;
-    
-    public GroupDao(ConnectionHandler handler) {
-        this.handler = handler;
+    public GroupDao(DBConfigDto config) {
+        this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
     }
     
     private static final String QUERY_INSERT_GROUP_NAME = "INSERT into groups(group_name) values(?)";
