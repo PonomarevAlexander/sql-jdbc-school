@@ -9,27 +9,21 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Student;
 
-public class StudentDao implements Dao<Student, List<Student>> {
-    
-private ConnectionHandler handler;
-    
-public StudentDao(DBConfigDto config) {
-    this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
-}
+public class StudentDao implements Dao<Student> {
 
+    private ConnectionHandler handler;
     private static final String QUERY_INSERT_STUDENT = "INSERT INTO students(first_name, last_name, group_id) values(?, ?, ?)";
-    private static final String QUERY_INSERT_COURSE = "INSERT INTO students_courses(student_id, course_id) VALUES(?, ?)";    
+    private static final String QUERY_INSERT_COURSE = "INSERT INTO students_courses(student_id, course_id) VALUES(?, ?)";
     private static final String QUERY_SELECT_ALL_STUDENTS = "SELECT * FROM students";
     private static final String QUERY_SELECT_BY_ID = "SELECT * FROM STUDENTS WHERE student_id = ?";
     private static final String QUERY_SELECT_STUDENTS_BY_COURSE = "SELECT first_name, last_name FROM students JOIN students_courses USING(student_id) WHERE course_id = ?";
     private static final String QUERY_SELECT_STUDENT_COURSES = "SELECT course_id FROM students_courses WHERE student_id = ?";
-    private static final String QUERY_DELETE_BY_ID = "DELETE FROM students WHERE student_id = ?";    
-    private static final String QUERY_DELETE_BY_FULL_NAME = "DELETE FROM students WHERE first_name = ? AND last_name = ?";    
+    private static final String QUERY_DELETE_BY_ID = "DELETE FROM students WHERE student_id = ?";
+    private static final String QUERY_DELETE_BY_FULL_NAME = "DELETE FROM students WHERE first_name = ? AND last_name = ?";
     private static final String QUERY_DELETE_FROM_COURSE = "DELETE FROM students_courses WHERE student_id = ? AND course_id = ?";
     private static final String QUERY_UPDATE_STUDENT = "UPDATE students SET first_name = ?, last_name = ?, group_id = ? WHERE student_id = ?";
     private static final String EXCEPTION_ADDING_FAIL = "student adding fail";
@@ -46,11 +40,15 @@ public StudentDao(DBConfigDto config) {
     private static final String COLUMN_STUDENT_ID = "student_id";
     private static final String COLUMN_GROUP_ID = "group_id";
     private static final String COLUMN_COURSE_ID = "course_id";
+
+    public StudentDao(DBConfigDto config) {
+        this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
+    }
     
     @Override
     public void add(Student entity) throws DaoException {
         Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_STUDENT)){
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_STUDENT)) {
             statement.setString(1, entity.getFirstName());
             statement.setString(2, entity.getLastName());
             statement.setInt(3, entity.getGroupId());
@@ -88,7 +86,7 @@ public StudentDao(DBConfigDto config) {
                 if (resultSet != null) {
                     resultSet.close();
                 }
-                    connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.getStackTrace();
             }
@@ -118,7 +116,7 @@ public StudentDao(DBConfigDto config) {
                 if (resultSet != null) {
                     resultSet.close();
                 }
-                    connection.close();
+                connection.close();
             } catch (SQLException ex) {
                 ex.getStackTrace();
             }
@@ -137,7 +135,7 @@ public StudentDao(DBConfigDto config) {
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_UPDATE, e);
-            
+
         }
         for (Integer course : entity.getCourses()) {
             try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_COURSE)) {
@@ -147,14 +145,14 @@ public StudentDao(DBConfigDto config) {
             } catch (SQLException e) {
                 throw new DaoException(EXCEPTION_UPDATE, e);
             }
-        } 
-        
+        }
+
         try {
             connection.close();
         } catch (SQLException e) {
             e.getStackTrace();
         }
-            
+
     }
 
     @Override
@@ -167,7 +165,7 @@ public StudentDao(DBConfigDto config) {
             throw new DaoException(EXCEPTION_REMOVE, e);
         } finally {
             try {
-                    connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -184,13 +182,13 @@ public StudentDao(DBConfigDto config) {
             throw new DaoException(EXCEPTION_REMOVE, e);
         } finally {
             try {
-                    connection.close();
+                connection.close();
             } catch (SQLException ex) {
                 ex.getStackTrace();
             }
         }
     }
-    
+
     public void remove(String name, String lastName) throws DaoException {
         Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_FULL_NAME)) {
@@ -201,13 +199,13 @@ public StudentDao(DBConfigDto config) {
             throw new DaoException(EXCEPTION_REMOVE, e);
         } finally {
             try {
-                    connection.close();
+                connection.close();
             } catch (SQLException ex) {
                 ex.getStackTrace();
             }
         }
     }
-    
+
     public List<Student> getStudentsWithGivenCourse(Course course) throws DaoException {
         Connection connection = handler.getConnection();
         ResultSet resultSet = null;
@@ -216,8 +214,7 @@ public StudentDao(DBConfigDto config) {
             statement.setInt(1, course.getCourseID());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Student student = new Student(
-                        resultSet.getString(COLUMN_FIRST_NAME),
+                Student student = new Student(resultSet.getString(COLUMN_FIRST_NAME),
                         resultSet.getString(COLUMN_LAST_NAME));
                 resultList.add(student);
             }
@@ -233,10 +230,10 @@ public StudentDao(DBConfigDto config) {
                 e1.getStackTrace();
             }
         }
-        
+
         return resultList;
     }
-    
+
     public void addCourseSet(Student student) throws DaoException {
         Connection connection = handler.getConnection();
         int id = student.getStudentID();
@@ -256,7 +253,7 @@ public StudentDao(DBConfigDto config) {
             }
         }
     }
-    
+
     public void removeFromCourse(int studentId, int courseId) throws DaoException {
         Connection connection = handler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_FROM_COURSE)) {
@@ -273,7 +270,7 @@ public StudentDao(DBConfigDto config) {
             }
         }
     }
-    
+
     public Set<Integer> getStudentCourses(int studentId) throws DaoException {
         Connection connection = handler.getConnection();
         ResultSet resultSet = null;
@@ -281,7 +278,7 @@ public StudentDao(DBConfigDto config) {
         try (PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_STUDENT_COURSES)) {
             statement.setInt(1, studentId);
             resultSet = statement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 int courseId = resultSet.getInt(COLUMN_COURSE_ID);
                 courses.add(courseId);
             }

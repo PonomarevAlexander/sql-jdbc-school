@@ -11,14 +11,9 @@ import java.util.List;
 import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Course;
 
-public class CourseDao implements Dao<Course, List<Course>> {
+public class CourseDao implements Dao<Course> {
 
     private ConnectionHandler handler;
-    
-    public CourseDao(DBConfigDto config) {
-        this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
-    }
-
     private static final String QUERY_INSERT = "INSERT INTO courses(course_name, course_description) VALUES(?, ?)";
     private static final String QUERY_SELECT_ALL = "SELECT * FROM courses";
     private static final String QUERY_SELECT_BY_ID = "SELECT * FROM courses WHERE course_id = ?";
@@ -33,7 +28,9 @@ public class CourseDao implements Dao<Course, List<Course>> {
     private static final String EXCEPTION_UPDATE = "updating failure";
     private static final String EXCEPTION_REMOVE = "removing fail";
     
-    
+    public CourseDao(DBConfigDto config) {
+        this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
+    }
     
     @Override
     public void add(Course entity) throws DaoException {

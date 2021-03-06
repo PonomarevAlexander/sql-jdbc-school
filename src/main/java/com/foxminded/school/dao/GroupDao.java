@@ -9,18 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Group;
 
 public class GroupDao implements Dao<Group, List<Group>> {
 
     private ConnectionHandler handler;
-    
-    public GroupDao(DBConfigDto config) {
-        this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
-    }
-    
     private static final String QUERY_INSERT_GROUP_NAME = "INSERT into groups(group_name) values(?)";
     private static final String QUERY_SELECT_ALL = "SELECT * from groups";
     private static final String QUERY_SELECT_BY_ID = "SELECT * from groups where group_id = ?";
@@ -36,11 +30,15 @@ public class GroupDao implements Dao<Group, List<Group>> {
     private static final String EXCEPTION_UPDATE = "updating fail";
     private static final String EXCEPTION_REMOVE = "removing fail";
     private static final String EXCEPTION_COUNTING = "counting students in group fail";
+   
+    public GroupDao(DBConfigDto config) {
+        this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
+    }
     
     @Override
     public void add(Group entity) throws DaoException {
         Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_GROUP_NAME)){
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_GROUP_NAME)) {
             statement.setString(1, entity.getGroupName());
             statement.execute();
         } catch (SQLException e) {
