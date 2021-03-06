@@ -1,10 +1,12 @@
 package com.foxminded.school.dao;
 
-public interface Dao<T, E> {
+import java.util.List;
+
+public interface Dao<T> {
     
     void add(T entity) throws DaoException;
     
-    E getAll() throws DaoException; 
+    List<T> getAll() throws DaoException; 
     
     T getById(int id) throws DaoException;
     
