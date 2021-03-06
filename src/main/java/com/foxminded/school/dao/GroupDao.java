@@ -12,7 +12,7 @@ import java.util.Map;
 import com.foxminded.school.domain.DBConfigDto;
 import com.foxminded.school.domain.models.Group;
 
-public class GroupDao implements Dao<Group, List<Group>> {
+public class GroupDao implements Dao<Group> {
 
     private ConnectionHandler handler;
     private static final String QUERY_INSERT_GROUP_NAME = "INSERT into groups(group_name) values(?)";
