@@ -13,7 +13,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.foxminded.school.domain.DBConfigDto;
+import com.foxminded.school.domain.DBConfig;
 import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Student;
 
@@ -21,7 +21,7 @@ class StudentDaoTest {
 
     private StudentDao studentDao;
     private CourseDao courseDao;
-    private DBConfigDto config = new DBConfigDto(URL, USER, PASSWORD);
+    private DBConfig config = new DBConfig(URL, USER, PASSWORD);
     private static Runner runner;
     private static final String URL = "jdbc:h2:~/test";
     private static final String USER = "alex";

@@ -21,7 +21,7 @@ import com.foxminded.school.domain.services.StudentService;
 class OptionMenuTest {
     
     private OptionMenu menu;
-    private DBConfigDto config;
+    private DBConfig config;
     private StudentDao studentDao;
     private GroupDao groupDao;
     private CourseDao courseDao;
@@ -42,7 +42,7 @@ class OptionMenuTest {
     
     @BeforeEach
     void setup() {
-        config = new DBConfigDto(URL, USER, PASSWORD);
+        config = new DBConfig(URL, USER, PASSWORD);
         studentDao = new StudentDao(config);
         groupDao = new GroupDao(config);
         courseDao = new CourseDao(config);

@@ -15,7 +15,7 @@ import com.foxminded.school.dao.DaoException;
 import com.foxminded.school.dao.Runner;
 import com.foxminded.school.dao.StudentDao;
 import com.foxminded.school.domain.ConsoleFormatter;
-import com.foxminded.school.domain.DBConfigDto;
+import com.foxminded.school.domain.DBConfig;
 import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Student;
 
@@ -24,7 +24,7 @@ class StudentServiceTest {
 
     private StudentService studentService;
     private Runner runner;
-    private DBConfigDto config = new DBConfigDto(URL, USER, PASSWORD);
+    private DBConfig config = new DBConfig(URL, USER, PASSWORD);
     private static final String URL = "jdbc:h2:~/test";
     private static final String USER = "alex";
     private static final String PASSWORD = "";

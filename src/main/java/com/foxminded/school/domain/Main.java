@@ -14,16 +14,16 @@ import com.foxminded.school.domain.services.StudentService;
 import com.foxminded.school.dao.*;
 
 public class Main {
-
+    
+    private static final String URL = "jdbc:postgresql://localhost:5432/school";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "1234";
+    private static final String CREATE = "src\\main\\resources\\create_tables_script.sql";
+    private static final String DROP = "src\\main\\resources\\drop_tables.sql";
+    
     public static void main(String[] args) {
         
-        String url = "jdbc:postgresql://localhost:5432/school";
-        String user = "postgres";
-        String password = "1234";
-        String create = "src\\main\\resources\\create_tables_script.sql";
-        String drop = "src\\main\\resources\\drop_tables.sql";
-        
-        DBConfigDto config = new DBConfigDto(url, user, password);
+        DBConfig config = new DBConfig(URL, USER, PASSWORD);
         Runner runner = new Runner(config);
         GroupFactory groupFactory = new GroupFactory();
         CourseFactory courseFactory = new CourseFactory();
@@ -35,8 +35,8 @@ public class Main {
         OptionMenu menu = new OptionMenu(studentService, courseService, groupService);
         Scanner scanner = new Scanner(System.in);
  
-        runner.executeScript(drop);
-        runner.executeScript(create);
+        runner.executeScript(DROP);
+        runner.executeScript(CREATE);
         
         groupFactory.generate(10).forEach(group -> groupService.add(group));
         studentFactory.generate(200).forEach(student -> studentService.add(student));

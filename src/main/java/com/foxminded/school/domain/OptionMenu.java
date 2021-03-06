@@ -28,7 +28,7 @@ public class OptionMenu {
     private static final String DELETE_STUDENT = "Delete student by ID";
     private static final String ADD_STUDENT_TO_COURSE = "Add a student to the course (from a list)";
     private static final String REMOVE_STUDENT_FROM_COURSE = "Remove the student from one of his or her course";
-    
+   
     private StudentService studentService;
     private CourseService courseService;
     private GroupService groupService;
@@ -56,6 +56,7 @@ public class OptionMenu {
     
     public String menuEngine(int select) {
         String result;
+        
         if (select == 1) {
             result = getMinStudents();
         } else if (select == 2) {

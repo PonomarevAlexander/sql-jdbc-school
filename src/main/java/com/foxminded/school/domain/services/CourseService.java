@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import com.foxminded.school.dao.CourseDao;
 import com.foxminded.school.dao.DaoException;
-import com.foxminded.school.domain.DBConfigDto;
+import com.foxminded.school.domain.DBConfig;
 import com.foxminded.school.domain.models.Course;
 
 public class CourseService implements Service<Course, List<Course>> {
     
     private CourseDao courseDao;
     
-    public CourseService(DBConfigDto config) {
+    public CourseService(DBConfig config) {
         this.courseDao = new CourseDao(config);
     }
 

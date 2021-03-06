@@ -7,13 +7,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
-import com.foxminded.school.domain.DBConfigDto;
+import com.foxminded.school.domain.DBConfig;
 
 public class Runner {
     
-    ConnectionHandler handler;
+    private ConnectionHandler handler;
 
-    public Runner(DBConfigDto config) {
+    public Runner(DBConfig config) {
         this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
     }
 

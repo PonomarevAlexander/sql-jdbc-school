@@ -10,14 +10,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.foxminded.school.domain.DBConfigDto;
+import com.foxminded.school.domain.DBConfig;
 import com.foxminded.school.domain.models.Course;
 
 class CourseDaoTest {
 
     private CourseDao courseDao;
     private static Runner runner;
-    private DBConfigDto config = new DBConfigDto(URL, USER, PASSWORD);
+    private DBConfig config = new DBConfig(URL, USER, PASSWORD);
     private static final String URL = "jdbc:h2:~/test";
     private static final String USER = "alex";
     private static final String PASSWORD = "";

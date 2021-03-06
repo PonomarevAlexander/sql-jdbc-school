@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.foxminded.school.domain.DBConfigDto;
+import com.foxminded.school.domain.DBConfig;
 import com.foxminded.school.domain.models.Group;
 
 public class GroupDao implements Dao<Group> {
@@ -31,7 +31,7 @@ public class GroupDao implements Dao<Group> {
     private static final String EXCEPTION_REMOVE = "removing fail";
     private static final String EXCEPTION_COUNTING = "counting students in group fail";
    
-    public GroupDao(DBConfigDto config) {
+    public GroupDao(DBConfig config) {
         this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
     }
     

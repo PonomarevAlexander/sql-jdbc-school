@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import com.foxminded.school.domain.DBConfigDto;
+import com.foxminded.school.domain.DBConfig;
 import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Student;
 
@@ -41,7 +41,7 @@ public class StudentDao implements Dao<Student> {
     private static final String COLUMN_GROUP_ID = "group_id";
     private static final String COLUMN_COURSE_ID = "course_id";
 
-    public StudentDao(DBConfigDto config) {
+    public StudentDao(DBConfig config) {
         this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
     }
     

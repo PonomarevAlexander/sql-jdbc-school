@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.foxminded.school.domain.DBConfigDto;
+import com.foxminded.school.domain.DBConfig;
 import com.foxminded.school.domain.models.Course;
 
 public class CourseDao implements Dao<Course> {
@@ -28,7 +28,7 @@ public class CourseDao implements Dao<Course> {
     private static final String EXCEPTION_UPDATE = "updating failure";
     private static final String EXCEPTION_REMOVE = "removing fail";
     
-    public CourseDao(DBConfigDto config) {
+    public CourseDao(DBConfig config) {
         this.handler = new ConnectionHandler(config.getUrl(), config.getUser(), config.getPassword());
     }
     
