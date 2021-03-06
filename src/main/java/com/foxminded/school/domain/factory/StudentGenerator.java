@@ -5,7 +5,7 @@ import java.util.List;
 import com.foxminded.school.domain.models.Student;
 import com.github.javafaker.Faker;
 
-public class StudentFactory implements ModelFactory<List<Student>>{
+public class StudentGenerator implements ModelGenerator<List<Student>>{
     
     @Override
     public List<Student> generate(int count) {
