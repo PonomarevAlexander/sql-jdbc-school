@@ -1,12 +1,12 @@
 package com.foxminded.school.domain;
 
-public class DBConfigDto {
+public class DBConfig {
     
     private String url;
     private String user;
     private String password;
 
-    public DBConfigDto(String url, String user, String password) {
+    public DBConfig(String url, String user, String password) {
         this.url = url;
         this.user = user;
         this.password = password;
