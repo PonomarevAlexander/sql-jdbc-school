@@ -12,10 +12,12 @@ import java.util.stream.Stream;
 import com.foxminded.school.domain.models.Course;
 
 public class CourseGenerator implements ModelGenerator<List<Course>> {
-
+    
+    private static final Path courseData = Paths.get("C:\\Projects\\sql-jdbc-school\\src\\main\\resources\\course_data.txt");
+    
     @Override
     public List<Course> generate(int counter) {
-        Path courseData = Paths.get("C:\\Projects\\sql-jdbc-school\\src\\main\\resources\\course_data.txt");
+        
         List<Course> coursesList = new ArrayList<>();
         
         try (Stream<String> fileStream = Files.lines(courseData)){
