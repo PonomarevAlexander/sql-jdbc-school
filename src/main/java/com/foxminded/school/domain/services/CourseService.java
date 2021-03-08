@@ -7,7 +7,7 @@ import com.foxminded.school.dao.DaoException;
 import com.foxminded.school.domain.DBConfig;
 import com.foxminded.school.domain.models.Course;
 
-public class CourseService implements Service<Course, List<Course>> {
+public class CourseService implements Service<Course> {
     
     private CourseDao courseDao;
     
@@ -47,7 +47,7 @@ public class CourseService implements Service<Course, List<Course>> {
     }
 
     @Override
-    public void edit(Course entity) {
+    public void update(Course entity) {
         try {
             courseDao.update(entity);
         } catch (DaoException e) {
@@ -82,5 +82,4 @@ public class CourseService implements Service<Course, List<Course>> {
         }
         return course;
     }
-
 }

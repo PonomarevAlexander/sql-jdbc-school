@@ -1,11 +1,11 @@
-package com.foxminded.school.domain.factory;
+package com.foxminded.school.domain.generators;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.foxminded.school.domain.models.Group;
 import com.github.javafaker.Faker;
 
-public class GroupFactory implements ModelFactory<List<Group>> {
+public class GroupGenerator implements ModelGenerator<List<Group>> {
 
     private static final String TWO_CHARS = "[a-z]{2}";
     private static final String TWO_DIGITS = "[0-99]{2}";

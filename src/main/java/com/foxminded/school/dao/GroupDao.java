@@ -20,7 +20,7 @@ public class GroupDao implements Dao<Group> {
     private static final String QUERY_SELECT_BY_ID = "SELECT * from groups where group_id = ?";
     private static final String QUERY_UPDATE_NAME = "UPDATE groups SET group_name = ? WHERE group_id = ?";
     private static final String QUERY_DELETE_BY_ID = "DELETE FROM groups WHERE group_id = ?";
-    private static final String QUERY_STUDENTS_COUNT_IN_GROUP = "SELECT group_name, COUNT(group_id) FROM students JOIN groups USING(group_id) GROUP BY group_name";
+    private static final String QUERY_STUDENTS_COUNT_IN_GROUP = "SELECT group_name, COUNT(s.group_id) AS count FROM students AS s JOIN groups USING(group_id) GROUP BY group_name";
     private static final String COLUMN_GROUP_NAME = "group_name";
     private static final String COLUMN_GROUP_ID = "group_id";
     private static final String COLUMN_COUNT = "count";
@@ -184,5 +184,4 @@ public class GroupDao implements Dao<Group> {
         }
         return resultCount;
     }
-    
 }

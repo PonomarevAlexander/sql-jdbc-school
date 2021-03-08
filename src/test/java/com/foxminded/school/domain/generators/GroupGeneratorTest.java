@@ -1,4 +1,4 @@
-package com.foxminded.school.domain.factory;
+package com.foxminded.school.domain.generators;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,15 +7,16 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.foxminded.school.domain.generators.GroupGenerator;
 import com.foxminded.school.domain.models.Group;
 
-class GroupFactoryTest {
+class GroupGeneratorTest {
 
-    GroupFactory gFactory;
+    GroupGenerator gFactory;
     
     @BeforeEach
     void init() {
-        gFactory = new GroupFactory();
+        gFactory = new GroupGenerator();
     }
     
     @Test

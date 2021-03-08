@@ -1,4 +1,4 @@
-package com.foxminded.school.domain.factory;
+package com.foxminded.school.domain.generators;
 
 import java.util.ArrayList;
 import java.util.List;

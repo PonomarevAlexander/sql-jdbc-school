@@ -1,4 +1,4 @@
-package com.foxminded.school.domain.factory;
+package com.foxminded.school.domain.generators;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,7 +19,6 @@ public class CourseGenerator implements ModelGenerator<List<Course>> {
     public List<Course> generate(int counter) {
         
         List<Course> coursesList = new ArrayList<>();
-        
         try (Stream<String> fileStream = Files.lines(courseData)){
             coursesList = fileStream.limit(counter).map(line -> new Course(line)).collect(Collectors.toList());
         } catch (IOException e) {

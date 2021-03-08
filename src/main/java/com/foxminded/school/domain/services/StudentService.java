@@ -11,7 +11,7 @@ import com.foxminded.school.domain.DBConfig;
 import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Student;
 
-public class StudentService implements Service<Student, List<Student>> {
+public class StudentService implements Service<Student> {
     
     private StudentDao studentDao;
 
@@ -61,7 +61,7 @@ public class StudentService implements Service<Student, List<Student>> {
     }
 
     @Override
-    public void edit(Student entity) {
+    public void update(Student entity) {
         try {
             studentDao.update(entity);
         } catch (DaoException e) {

@@ -1,6 +1,9 @@
 package com.foxminded.school.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -26,9 +29,7 @@ class OptionMenuTest {
     private GroupDao groupDao;
     private CourseDao courseDao;
     private static Runner runner;
-    private static final String URL = "jdbc:h2:~/test";
-    private static final String USER = "alex";
-    private static final String PASSWORD = "";
+    private static final Path testCfgFile = Paths.get("src\\test\\resources\\test_db_config.txt");
     private static final String CREATE_TABLES = "src\\main\\resources\\create_tables_script.sql";
     private static final String DROP_TABLES = "src\\main\\resources\\drop_tables.sql";
     private static final String EXPECTED_MENU = "------------------------------------------------------------\n"
@@ -38,11 +39,22 @@ class OptionMenuTest {
             + "4 Delete student by ID\n"
             + "5 Add a student to the course (from a list)\n"
             + "6 Remove the student from one of his or her course\n"
-            + "------------------------------------------------------------";    
+            + "------------------------------------------------------------";
+    private static final String STUDENT_NAME_1 = "alex";
+    private static final String STUDENT_NAME_2 = "fill";
+    private static final String STUDENT_NAME_3 = "bill";
+    private static final String STUDENT_NAME_4 = "chuck";
+    private static final String STUDENT_NAME_5 = "lex";
+    private static final String STUDENT_NAME_6 = "john";
+    private static final String GROUP_NAME_1 = "aa--00";
+    private static final String GROUP_NAME_2 = "bb--11";
+    private static final String COURSE_NAME_1 = "math";
+    private static final String COURSE_NAME_2 = "biology";
+    private static final String COURSE_NAME_3 = "art";
     
     @BeforeEach
-    void setup() {
-        config = new DBConfig(URL, USER, PASSWORD);
+    void setup() throws DaoException {
+        config = new DBConfig(testCfgFile);
         studentDao = new StudentDao(config);
         groupDao = new GroupDao(config);
         courseDao = new CourseDao(config);
@@ -53,47 +65,21 @@ class OptionMenuTest {
         runner = new Runner(config);
         runner.executeScript(DROP_TABLES);
         runner.executeScript(CREATE_TABLES);
-        List<Group> groups = Arrays.asList(new Group("groupOne"), new Group("groupTwo"));
-        List<Course> courses = Arrays.asList(new Course("math"), new Course("english"), new Course("science"));
-        List<Student> students = Arrays.asList(
-                new Student(1, "Ivan", "Ivanov", 1, new HashSet<Integer>(Arrays.asList(1,2,3))),
-                new Student(2, "Ivan", "Sergeev", 1, new HashSet<Integer>(Arrays.asList(1,2))),
-                new Student(3, "Sergey", "Sergeev", 2, new HashSet<Integer>(Arrays.asList(1))),
-                new Student(4, "Sergey", "Ivanov", 2, new HashSet<Integer>(Arrays.asList(1,3))),
-                new Student(5, "Alexey", "Alexeev", 1, new HashSet<Integer>(Arrays.asList(2,3))),
-                new Student(6, "Dmitriy", "Dmitriev", 1, new HashSet<Integer>(Arrays.asList(2))));
-        
-        groups.forEach(group -> {
-            try {
-                groupDao.add(group);
-            } catch (DaoException e) {
-                e.printStackTrace();
-            }
-        });
-        
-        courses.forEach(course -> {
-            try {
-                courseDao.add(course);
-            } catch (DaoException e) {
-                e.printStackTrace();
-            }
-        });
-        
-        students.forEach(student -> {
-            try {
-                studentDao.add(student);
-            } catch (DaoException e) {
-                e.printStackTrace();
-            }
-        });
-        
-        students.forEach(student -> {
-            try {
-                studentDao.addCourseSet(student);
-            } catch (DaoException e) {
-                e.printStackTrace();
-            }
-        });
+        List<Student> students = Arrays.asList(new Student(1, STUDENT_NAME_1, STUDENT_NAME_1, 1, new HashSet<Integer>(Arrays.asList(1,2,3))),
+                new Student(2, STUDENT_NAME_2, STUDENT_NAME_2, 1, new HashSet<Integer>(Arrays.asList(1,2,3))),
+                new Student(3, STUDENT_NAME_3, STUDENT_NAME_3, 1, new HashSet<Integer>(Arrays.asList(1,2))),
+                new Student(4, STUDENT_NAME_4, STUDENT_NAME_4, 2, new HashSet<Integer>(Arrays.asList(1))),
+                new Student(5, STUDENT_NAME_5, STUDENT_NAME_5, 2, new HashSet<Integer>(Arrays.asList(1,3))),
+                new Student(6, STUDENT_NAME_6, STUDENT_NAME_6, 2, new HashSet<Integer>(Arrays.asList(2,3))));
+        groupDao.add(new Group(GROUP_NAME_1));
+        groupDao.add(new Group(GROUP_NAME_2));
+        courseDao.add(new Course(COURSE_NAME_1));
+        courseDao.add(new Course(COURSE_NAME_2));
+        courseDao.add(new Course(COURSE_NAME_3));
+        for (Student student : students) {
+            studentDao.add(student);
+            studentDao.update(student);
+        }
     }
     
     @Test
@@ -101,29 +87,10 @@ class OptionMenuTest {
         String actual = menu.showMainMenu();
         assertEquals(EXPECTED_MENU, actual);
     }
+    
+    @Test
+    void testResultMenuEngineSelect1() {
+        String actual = menu.menuEngine(1);
+        assertEquals(GROUP_NAME_1, actual);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

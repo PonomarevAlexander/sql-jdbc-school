@@ -40,8 +40,5 @@ public class SortingHat {
                     .forEach(id -> courseSet.add(id));
             student.setCourses(courseSet);
         }
-        
-        
-        
     }
 }

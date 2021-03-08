@@ -20,7 +20,7 @@ class GroupDaoTest {
     private GroupDao groupDao;
     private StudentDao studentDao;
     private DBConfig config;
-    private static Runner runner;
+    private Runner runner;
     private static final Path testCfgFile = Paths.get("src\\test\\resources\\test_db_config.txt");
     private static final String GROUP_NAME_1 = "aa--00";
     private static final String GROUP_NAME_2 = "bb--11";
@@ -42,16 +42,11 @@ class GroupDaoTest {
                 new Student(3,"bar", "bar", 2, new HashSet<Integer>(Arrays.asList(1))),
                 new Student(4,"foo", "foo", 2, new HashSet<Integer>(Arrays.asList(1,3))),
                 new Student(5,"mazz", "mazz", 2, new HashSet<Integer>(Arrays.asList(2,3))));
-        students.forEach(student -> {
-            try {
-                studentDao.add(student);
-            } catch (DaoException e) {
-                e.printStackTrace();
-            }
-        });
+        for (Student student : students) {
+            studentDao.add(student);
+        }
         groupDao.add(new Group(GROUP_NAME_1));
         groupDao.add(new Group(GROUP_NAME_2));
-        
     }
 
     @Test

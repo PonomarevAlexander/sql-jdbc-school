@@ -1,12 +1,14 @@
-package com.foxminded.school.domain.factory;
+package com.foxminded.school.domain.generators;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.foxminded.school.domain.generators.CourseGenerator;
 import com.foxminded.school.domain.models.Course;
 
-class CourseFactoryTest {
+class CourseGeneratorTest {
 
     private CourseGenerator courseGenerator;
     

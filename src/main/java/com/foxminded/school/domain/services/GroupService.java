@@ -11,7 +11,7 @@ import com.foxminded.school.dao.GroupDao;
 import com.foxminded.school.domain.DBConfig;
 import com.foxminded.school.domain.models.Group;
 
-public class GroupService implements Service<Group, List<Group>> {
+public class GroupService implements Service<Group> {
     
     private GroupDao groupDao;
 
@@ -40,7 +40,7 @@ public class GroupService implements Service<Group, List<Group>> {
     }
     
     @Override
-    public void edit(Group group) {
+    public void update(Group group) {
         try {
             groupDao.update(group);
         } catch (DaoException e) {

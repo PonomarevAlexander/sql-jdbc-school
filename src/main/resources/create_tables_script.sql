@@ -14,5 +14,5 @@ CREATE TABLE courses(
     course_description text);
     
 CREATE TABLE students_courses(
-    student_id integer references students(student_id),
-    course_id integer references courses(course_id));
+    student_id integer references students(student_id) on delete cascade,
+    course_id integer references courses(course_id) on delete cascade);

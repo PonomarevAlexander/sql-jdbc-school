@@ -1,33 +1,22 @@
 package com.foxminded.school.domain.services;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import com.foxminded.school.dao.ConnectionHandler;
-import com.foxminded.school.dao.DaoException;
 import com.foxminded.school.dao.Runner;
-import com.foxminded.school.dao.StudentDao;
-import com.foxminded.school.domain.ConsoleFormatter;
 import com.foxminded.school.domain.DBConfig;
-import com.foxminded.school.domain.models.Course;
 import com.foxminded.school.domain.models.Student;
 
-@ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
 
     private StudentService studentService;
     private Runner runner;
-    private DBConfig config = new DBConfig(URL, USER, PASSWORD);
-    private static final String URL = "jdbc:h2:~/test";
-    private static final String USER = "alex";
-    private static final String PASSWORD = "";
+    private DBConfig config;
+    private static final Path testCfgFile = Paths.get("src\\test\\resources\\test_db_config.txt");
     private static final String CREATE_TABLES = "src\\main\\resources\\create_tables_script.sql";
     private static final String DROP_TABLES = "src\\main\\resources\\drop_tables.sql";
     private static final String NAME_1 = "dart";
@@ -36,28 +25,10 @@ class StudentServiceTest {
     private static final String LAST_NAME_2 = "fisher";
     private static final String NAME_3 = "peter";
     private static final String LAST_NAME_3 = "parker";
-    
-    @Mock
-    StudentDao mockedDao;
-    
-    @Mock
-    ConnectionHandler mockedHandler;
-    
-    @Mock
-    Student mockedStudent;
-    
-    @Mock
-    Course mockedCourse;
-    
-    @Mock
-    ConsoleFormatter mockedFormatter;
-   
-    @InjectMocks
-    StudentService mockedService = new StudentService(config);
-    
-    
+  
     @BeforeEach
     void init() {
+        config = new DBConfig(testCfgFile);
         runner = new Runner(config);
         runner.executeScript(DROP_TABLES);
         runner.executeScript(CREATE_TABLES);
@@ -97,7 +68,7 @@ class StudentServiceTest {
         Student student = studentService.getById(1);
         student.setFirstName(NAME_3);
         student.setLastName(LAST_NAME_3);
-        studentService.edit(student);
+        studentService.update(student);
         Student actual = studentService.getById(1);
         
         assertEquals(NAME_3, actual.getFirstName());
@@ -126,125 +97,4 @@ class StudentServiceTest {
         assertEquals(2, initialList.size());
         assertEquals(1, actualList.size());
     }
-    
-    @Test
-    void testAddTimeInvoke() {
-        mockedService.add(mockedStudent);
-        try {
-            verify(mockedDao).add(mockedStudent);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    void testGetAllTimeInvoke() {
-        mockedService.getAll();
-        try {
-            verify(mockedDao).getAll();
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    void testEditTimeInvoke() {
-        mockedService.edit(mockedStudent);;
-        try {
-            verify(mockedDao).update(mockedStudent);;
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    void testRemoveByIdTimeInvoke() {
-        mockedService.remove(anyInt());
-        try {
-            verify(mockedDao).remove(anyInt());
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    void testRemoveByEntityTimeInvoke() {
-        mockedService.remove(mockedStudent);;
-        try {
-            verify(mockedDao).remove(mockedStudent);;
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    void testRemoveByFullNameTimeInvoke() {
-        mockedService.remove(anyString(), anyString());
-        try {
-            verify(mockedDao).remove(anyString(), anyString());
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    void testGetStudentGivenCourseTimesInvoke() {
-        mockedService.getStudentsFromGivenCourse(mockedCourse);
-        try {
-            verify(mockedDao).getStudentsWithGivenCourse(mockedCourse);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    void testAddCoursesTimesInvoke() {
-        mockedService.addCourses(mockedStudent);
-        try {
-            verify(mockedDao).addCourseSet(mockedStudent);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    void testRemoveFromCourseTimesInvoke() {
-        mockedService.removeFromCourse(mockedStudent, 1);
-        try {
-            verify(mockedDao).removeFromCourse(mockedStudent.getStudentID(), 1);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    void testGetStudentCourses() {
-        mockedService.getStudentCourses(mockedStudent);
-        try {
-            verify(mockedStudent).getStudentID();
-            verify(mockedDao).getStudentCourses(mockedStudent.getStudentID());
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

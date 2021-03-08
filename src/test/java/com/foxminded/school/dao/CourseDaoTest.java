@@ -13,7 +13,6 @@ import com.foxminded.school.domain.models.Course;
 
 class CourseDaoTest {
     
-
     private CourseDao courseDao;
     private DBConfig config;
     private Runner runner;

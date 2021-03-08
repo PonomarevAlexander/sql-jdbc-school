@@ -11,6 +11,11 @@ import com.foxminded.school.domain.services.StudentService;
 
 public class OptionMenu {
 
+    private StudentService studentService;
+    private CourseService courseService;
+    private GroupService groupService;
+    private Scanner scanner = new Scanner(System.in);
+    private ConsoleFormatter formatter = new ConsoleFormatter();
     private static final String NEW_LINE = "\n";
     private static final String SPACE = " ";
     private static final String TRY_AGAIN = "Try it again";
@@ -28,12 +33,6 @@ public class OptionMenu {
     private static final String DELETE_STUDENT = "Delete student by ID";
     private static final String ADD_STUDENT_TO_COURSE = "Add a student to the course (from a list)";
     private static final String REMOVE_STUDENT_FROM_COURSE = "Remove the student from one of his or her course";
-   
-    private StudentService studentService;
-    private CourseService courseService;
-    private GroupService groupService;
-    private Scanner scanner = new Scanner(System.in);
-    private ConsoleFormatter formatter = new ConsoleFormatter();
     
     public OptionMenu(StudentService studentService, CourseService courseService, GroupService groupService) {
         this.studentService = studentService;

@@ -1,15 +1,21 @@
 package com.foxminded.school.domain;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class DBConfig {
     
     private String url;
     private String user;
     private String password;
 
-    public DBConfig(String url, String user, String password) {
-        this.url = url;
-        this.user = user;
-        this.password = password;
+    public DBConfig(Path config) {
+        setConfiguration(config);
     }
 
     public String getUrl() {
@@ -24,15 +30,15 @@ public class DBConfig {
         return password;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    private void setConfiguration(Path config) {
+        List<String> data = new ArrayList<>();
+        try (Stream<String> fileStream = Files.lines(config)) {
+            data = fileStream.limit(3).collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.url = data.get(0);
+        this.user = data.get(1);
+        this.password = data.get(2);
     }
 }

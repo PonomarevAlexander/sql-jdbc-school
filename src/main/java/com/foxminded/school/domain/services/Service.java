@@ -1,14 +1,16 @@
 package com.foxminded.school.domain.services;
 
-public interface Service<T, E> {
+import java.util.List;
+
+public interface Service<T> {
     
     void add(T entity);
     
-    E getAll();
+    List<T> getAll();
     
     T getById(int id);
     
-    void edit(T entity);
+    void update(T entity);
     
     void remove(T entity);
     
