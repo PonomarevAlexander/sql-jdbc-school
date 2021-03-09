@@ -37,150 +37,100 @@ public class GroupDao implements Dao<Group> {
     
     @Override
     public void add(Group entity) throws DaoException {
-        Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_GROUP_NAME)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_GROUP_NAME)) {
             statement.setString(1, entity.getGroupName());
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_ADD_GROUP, e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.getStackTrace();
-            }
         }
     }
 
     @Override
     public List<Group> getAll() throws DaoException {
-        Connection connection = handler.getConnection();
-        ResultSet resultSet = null;
         List<Group> groupsList = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
-            resultSet = statement.executeQuery(QUERY_SELECT_ALL);
-            while (resultSet.next()) {
-                Group group = new Group();
-                group.setGroupName(resultSet.getString(COLUMN_GROUP_NAME));
-                group.setGroupID(resultSet.getInt(COLUMN_GROUP_ID));
-                groupsList.add(group);
+        try (Connection connection = handler.getConnection();
+                Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(QUERY_SELECT_ALL)) {
+                while (resultSet.next()) {
+                    Group group = new Group();
+                    group.setGroupName(resultSet.getString(COLUMN_GROUP_NAME));
+                    group.setGroupID(resultSet.getInt(COLUMN_GROUP_ID));
+                    groupsList.add(group);
+                }
             }
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_GET_ALL, e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                connection.close();
-            } catch (SQLException e) {
-                e.getStackTrace();
-            }
         }
         return groupsList;
     }
 
     @Override
     public Group getById(int id) throws DaoException {
-        Connection connection = handler.getConnection();
-        ResultSet resultSet = null;
         Group group = new Group();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_BY_ID)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_BY_ID)) {
             statement.setInt(1, id);
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                group.setGroupName(resultSet.getString(COLUMN_GROUP_NAME));
-                group.setGroupID(resultSet.getInt(COLUMN_GROUP_ID));
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    group.setGroupName(resultSet.getString(COLUMN_GROUP_NAME));
+                    group.setGroupID(resultSet.getInt(COLUMN_GROUP_ID));
+                }
             }
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_GET_BY_ID, e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                connection.close();
-            } catch (SQLException e) {
-                e.getStackTrace();
-            }
         }
         return group;
     }
 
     @Override
     public void update(Group entity) throws DaoException {
-        Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_NAME)) {
+        
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_NAME)) {
             statement.setString(1, entity.getGroupName());
             statement.setInt(2, entity.getGroupID());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_UPDATE, e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     @Override
     public void remove(Group entity) throws DaoException {
-        Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
             statement.setInt(1, entity.getGroupID());
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_REMOVE, e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                ex.getStackTrace();
-            }
         }
     }
     
     @Override
     public void remove(int id) throws DaoException {
-        Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_REMOVE, e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                ex.getStackTrace();
-            }
         }
     }
     
     public Map<String, Integer> getCountStudentsIntoGroups() throws DaoException {
-        Connection connection = handler.getConnection();
-        ResultSet resultSet = null;
         Map<String, Integer> resultCount = new HashMap<>();
-        try (Statement statement = connection.createStatement()) {
-            resultSet = statement.executeQuery(QUERY_STUDENTS_COUNT_IN_GROUP);
-            while(resultSet.next()) {
-                resultCount.put(
-                        resultSet.getString(COLUMN_GROUP_NAME),
-                        resultSet.getInt(COLUMN_COUNT));
+        try (Connection connection = handler.getConnection();
+                Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(QUERY_STUDENTS_COUNT_IN_GROUP)) {
+                while(resultSet.next()) {
+                    resultCount.put(
+                            resultSet.getString(COLUMN_GROUP_NAME),
+                            resultSet.getInt(COLUMN_COUNT));
+                }
             }
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_COUNTING, e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                connection.close();
-            } catch (SQLException e1) {
-                e1.getStackTrace();
-            }
         }
         return resultCount;
     }

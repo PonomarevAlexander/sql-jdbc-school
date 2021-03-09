@@ -47,87 +47,63 @@ public class StudentDao implements Dao<Student> {
     
     @Override
     public void add(Student entity) throws DaoException {
-        Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_STUDENT)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_STUDENT)) {
             statement.setString(1, entity.getFirstName());
             statement.setString(2, entity.getLastName());
             statement.setInt(3, entity.getGroupId());
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_ADDING_FAIL, e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.getStackTrace();
-            }
         }
     }
 
     @Override
     public List<Student> getAll() throws DaoException {
-        Connection connection = handler.getConnection();
-        ResultSet resultSet = null;
         List<Student> studentsList = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
-            resultSet = statement.executeQuery(QUERY_SELECT_ALL_STUDENTS);
-            while (resultSet.next()) {
-                Student student = new Student();
-                student.setFirstName(resultSet.getString(COLUMN_FIRST_NAME));
-                student.setLastName(resultSet.getString(COLUMN_LAST_NAME));
-                student.setStudentID(resultSet.getInt(COLUMN_STUDENT_ID));
-                student.setGroupId(resultSet.getInt(COLUMN_GROUP_ID));
-                studentsList.add(student);
+        try (Connection connection = handler.getConnection();
+                Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(QUERY_SELECT_ALL_STUDENTS)) {
+                while (resultSet.next()) {
+                    Student student = new Student();
+                    student.setFirstName(resultSet.getString(COLUMN_FIRST_NAME));
+                    student.setLastName(resultSet.getString(COLUMN_LAST_NAME));
+                    student.setStudentID(resultSet.getInt(COLUMN_STUDENT_ID));
+                    student.setGroupId(resultSet.getInt(COLUMN_GROUP_ID));
+                    studentsList.add(student);
+                }
             }
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_GET_ALL, e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                connection.close();
-            } catch (SQLException e) {
-                e.getStackTrace();
-            }
         }
         return studentsList;
     }
 
     @Override
     public Student getById(int id) throws DaoException {
-        Connection connection = handler.getConnection();
-        ResultSet resultSet = null;
         Student student = new Student();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_BY_ID)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_BY_ID)) {
             statement.setInt(1, id);
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                student.setFirstName(resultSet.getString(COLUMN_FIRST_NAME));
-                student.setLastName(resultSet.getString(COLUMN_LAST_NAME));
-                student.setStudentID(resultSet.getInt(COLUMN_STUDENT_ID));
-                student.setGroupId(resultSet.getInt(COLUMN_GROUP_ID));
-                student.setCourses(getStudentCourses(id));
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    student.setFirstName(resultSet.getString(COLUMN_FIRST_NAME));
+                    student.setLastName(resultSet.getString(COLUMN_LAST_NAME));
+                    student.setStudentID(resultSet.getInt(COLUMN_STUDENT_ID));
+                    student.setGroupId(resultSet.getInt(COLUMN_GROUP_ID));
+                    student.setCourses(getStudentCourses(id));
+                }
             }
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_GET_BY_ID, e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                connection.close();
-            } catch (SQLException ex) {
-                ex.getStackTrace();
-            }
         }
         return student;
     }
 
     @Override
     public void update(Student entity) throws DaoException {
-        Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_STUDENT)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_STUDENT)) {
             statement.setString(1, entity.getFirstName());
             statement.setString(2, entity.getLastName());
             statement.setInt(3, entity.getGroupId());
@@ -135,10 +111,10 @@ public class StudentDao implements Dao<Student> {
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_UPDATE, e);
-
         }
         for (Integer course : entity.getCourses()) {
-            try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_COURSE)) {
+            try (Connection connection = handler.getConnection();
+                    PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_COURSE)) {
                 statement.setInt(1, entity.getStudentID());
                 statement.setInt(2, course);
                 statement.execute();
@@ -146,98 +122,63 @@ public class StudentDao implements Dao<Student> {
                 throw new DaoException(EXCEPTION_UPDATE, e);
             }
         }
-
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.getStackTrace();
-        }
-
     }
 
     @Override
     public void remove(Student entity) throws DaoException {
-        Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
             statement.setInt(1, entity.getStudentID());
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_REMOVE, e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     @Override
     public void remove(int id) throws DaoException {
-        Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_ID)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_REMOVE, e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                ex.getStackTrace();
-            }
         }
     }
 
     public void remove(String name, String lastName) throws DaoException {
-        Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_FULL_NAME)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_BY_FULL_NAME)) {
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_REMOVE, e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                ex.getStackTrace();
-            }
         }
     }
 
     public List<Student> getStudentsWithGivenCourse(Course course) throws DaoException {
-        Connection connection = handler.getConnection();
-        ResultSet resultSet = null;
         List<Student> resultList = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_STUDENTS_BY_COURSE)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_STUDENTS_BY_COURSE)) {
             statement.setInt(1, course.getCourseID());
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Student student = new Student(resultSet.getString(COLUMN_FIRST_NAME),
-                        resultSet.getString(COLUMN_LAST_NAME));
-                resultList.add(student);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Student student = new Student(resultSet.getString(COLUMN_FIRST_NAME),
+                            resultSet.getString(COLUMN_LAST_NAME));
+                    resultList.add(student);
+                }
             }
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_GET_STUDENTS_FROM_COURSE, e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                connection.close();
-            } catch (SQLException e1) {
-                e1.getStackTrace();
-            }
         }
-
         return resultList;
     }
 
     public void addCourseSet(Student student) throws DaoException {
-        Connection connection = handler.getConnection();
         int id = student.getStudentID();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_COURSE)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_INSERT_COURSE)) {
             for (Integer courseId : student.getCourses()) {
                 statement.setInt(1, id);
                 statement.setInt(2, courseId);
@@ -245,54 +186,33 @@ public class StudentDao implements Dao<Student> {
             }
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_ADD_COURSE, e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.getStackTrace();
-            }
         }
     }
 
     public void removeFromCourse(int studentId, int courseId) throws DaoException {
-        Connection connection = handler.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_FROM_COURSE)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_FROM_COURSE)) {
             statement.setInt(1, studentId);
             statement.setInt(2, courseId);
             statement.execute();
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_REMOVE_COURSE, e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.getStackTrace();
-            }
         }
     }
 
     public Set<Integer> getStudentCourses(int studentId) throws DaoException {
-        Connection connection = handler.getConnection();
-        ResultSet resultSet = null;
         Set<Integer> courses = new HashSet<>();
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_STUDENT_COURSES)) {
+        try (Connection connection = handler.getConnection();
+                PreparedStatement statement = connection.prepareStatement(QUERY_SELECT_STUDENT_COURSES)) {
             statement.setInt(1, studentId);
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int courseId = resultSet.getInt(COLUMN_COURSE_ID);
-                courses.add(courseId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int courseId = resultSet.getInt(COLUMN_COURSE_ID);
+                    courses.add(courseId);
+                }
             }
         } catch (SQLException e) {
             throw new DaoException(EXCEPTION_GET_COURSES, e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                connection.close();
-            } catch (SQLException e1) {
-                e1.getStackTrace();
-            }
         }
         return courses;
     }
