@@ -8,18 +8,18 @@ public class ConnectionHandler {
     
     private String url;
     private String user;
-    private String pwd;
+    private String password;
     
     public ConnectionHandler(String url, String user, String pwd) {
         this.url = url;
         this.user = user;
-        this.pwd = pwd;
+        this.password = pwd;
     }
 
     public Connection getConnection() {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(url, user, pwd);
+            connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             e.printStackTrace();            
         }
