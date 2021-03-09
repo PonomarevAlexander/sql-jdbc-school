@@ -13,13 +13,13 @@ import com.foxminded.school.domain.models.Course;
 
 public class CourseGenerator implements ModelGenerator<List<Course>> {
     
-    private static final Path courseData = Paths.get("C:\\Projects\\sql-jdbc-school\\src\\main\\resources\\course_data.txt");
+    private static final String COURSE_NAME_DATA = "src\\main\\resources\\course_data.txt";
     
     @Override
     public List<Course> generate(int counter) {
         
         List<Course> coursesList = new ArrayList<>();
-        try (Stream<String> fileStream = Files.lines(courseData)){
+        try (Stream<String> fileStream = Files.lines(Paths.get(COURSE_NAME_DATA))){
             coursesList = fileStream.limit(counter).map(line -> new Course(line)).collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();

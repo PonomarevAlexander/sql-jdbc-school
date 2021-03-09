@@ -18,18 +18,15 @@ public class Runner {
     }
 
     public void executeScript(String url) {
-        Connection connection = handler.getConnection();
-        ScriptRunner runner = new ScriptRunner(connection);
-        try (BufferedReader reader = new BufferedReader(new FileReader(url))) {
-            runner.runScript(reader);
+        try (Connection connection = handler.getConnection()) {
+            ScriptRunner runner = new ScriptRunner(connection);
+            try (BufferedReader reader = new BufferedReader(new FileReader(url))) {
+                runner.runScript(reader);
+            } 
+        } catch (SQLException e1) {
+            e1.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally { 
-            try {
-                connection.close();
-            } catch (SQLException e1) {
-                e1.getStackTrace();
-            }
         }
     }
 }

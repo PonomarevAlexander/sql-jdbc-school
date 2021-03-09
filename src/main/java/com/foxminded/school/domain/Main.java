@@ -1,10 +1,7 @@
 package com.foxminded.school.domain;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
-
 import com.foxminded.school.domain.generators.CourseGenerator;
 import com.foxminded.school.domain.generators.GroupGenerator;
 import com.foxminded.school.domain.generators.StudentGenerator;
@@ -20,11 +17,11 @@ public class Main {
     
     private static final String CREATE = "src\\main\\resources\\create_tables_script.sql";
     private static final String DROP = "src\\main\\resources\\drop_tables.sql";
-    private static final Path cfgFile = Paths.get("src\\main\\resources\\db_config.txt");
+    private static final String CONFIG_FILE_PATH = "src\\main\\resources\\db_config.txt";
     
     public static void main(String[] args) {
         
-        DBConfig config = new DBConfig(cfgFile);
+        DBConfig config = new DBConfig(CONFIG_FILE_PATH);
         Runner runner = new Runner(config);
         GroupGenerator groupGenerator = new GroupGenerator();
         CourseGenerator courseGenerator = new CourseGenerator();
