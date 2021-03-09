@@ -1,9 +1,6 @@
 package com.foxminded.school.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,17 +13,17 @@ class CourseDaoTest {
     private CourseDao courseDao;
     private DBConfig config;
     private Runner runner;
-    private static final Path testCfgFile = Paths.get("src\\test\\resources\\test_db_config.txt");
     private static final String COURSE_NAME_1 = "math";
     private static final String COURSE_NAME_2 = "english";
     private static final String COURSE_NAME_3 = "biology";
     private static final String COURSE_TEST_DESCRIPTION = "test test test test test";
+    private static final String TEST_CONFIG_FILE = "src\\test\\resources\\test_db_config.txt";
     private static final String CREATE_TABLES = "src\\main\\resources\\create_tables_script.sql";
     private static final String DROP_TABLES = "src\\main\\resources\\drop_tables.sql";
     
     @BeforeEach
     void init() throws DaoException {
-        config = new DBConfig(testCfgFile);
+        config = new DBConfig(TEST_CONFIG_FILE);
         courseDao = new CourseDao(config);
         runner = new Runner(config);
         runner.executeScript(DROP_TABLES);

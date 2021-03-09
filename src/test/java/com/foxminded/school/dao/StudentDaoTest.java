@@ -1,8 +1,6 @@
 package com.foxminded.school.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +18,7 @@ class StudentDaoTest {
     private CourseDao courseDao;
     private DBConfig config;
     private Runner runner;
-    private static final Path testCfgFile = Paths.get("src\\test\\resources\\test_db_config.txt");
+    private static final String TEST_CONFIG_FILE = "src\\test\\resources\\test_db_config.txt";
     private static final String CREATE_TABLES = "src\\main\\resources\\create_tables_script.sql";
     private static final String DROP_TABLES = "src\\main\\resources\\drop_tables.sql";
     private static final String STUDENT_NAME_1 = "alex";
@@ -38,7 +36,7 @@ class StudentDaoTest {
     
     @BeforeEach
     void init() throws DaoException {
-        config = new DBConfig(testCfgFile);
+        config = new DBConfig(TEST_CONFIG_FILE);
         studentDao = new StudentDao(config);
         groupDao = new GroupDao(config);
         courseDao = new CourseDao(config);

@@ -1,8 +1,6 @@
 package com.foxminded.school.domain.services;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +14,7 @@ class StudentServiceTest {
     private StudentService studentService;
     private Runner runner;
     private DBConfig config;
-    private static final Path testCfgFile = Paths.get("src\\test\\resources\\test_db_config.txt");
+    private static final String TEST_CONFIG_FILE = "src\\test\\resources\\test_db_config.txt";
     private static final String CREATE_TABLES = "src\\main\\resources\\create_tables_script.sql";
     private static final String DROP_TABLES = "src\\main\\resources\\drop_tables.sql";
     private static final String NAME_1 = "dart";
@@ -28,7 +26,7 @@ class StudentServiceTest {
   
     @BeforeEach
     void init() {
-        config = new DBConfig(testCfgFile);
+        config = new DBConfig(TEST_CONFIG_FILE);
         runner = new Runner(config);
         runner.executeScript(DROP_TABLES);
         runner.executeScript(CREATE_TABLES);

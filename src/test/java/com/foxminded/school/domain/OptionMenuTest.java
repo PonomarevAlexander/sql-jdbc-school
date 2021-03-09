@@ -1,9 +1,6 @@
 package com.foxminded.school.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +26,7 @@ class OptionMenuTest {
     private GroupDao groupDao;
     private CourseDao courseDao;
     private static Runner runner;
-    private static final Path testCfgFile = Paths.get("src\\test\\resources\\test_db_config.txt");
+    private static final String TEST_CONFIG_FILE = "src\\test\\resources\\test_db_config.txt";
     private static final String CREATE_TABLES = "src\\main\\resources\\create_tables_script.sql";
     private static final String DROP_TABLES = "src\\main\\resources\\drop_tables.sql";
     private static final String EXPECTED_MENU = "------------------------------------------------------------\n"
@@ -54,7 +51,7 @@ class OptionMenuTest {
     
     @BeforeEach
     void setup() throws DaoException {
-        config = new DBConfig(testCfgFile);
+        config = new DBConfig(TEST_CONFIG_FILE);
         studentDao = new StudentDao(config);
         groupDao = new GroupDao(config);
         courseDao = new CourseDao(config);
