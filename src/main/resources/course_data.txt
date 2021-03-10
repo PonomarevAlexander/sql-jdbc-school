@@ -1,0 +1,34 @@
+algebra
+archaeology
+art
+astronomy
+biology
+botany
+chemistry
+computer science
+cultural studies
+drama
+ecology
+economics
+english
+foreign language
+foreign literature
+french
+jurisprudence
+inorganic chemistry
+geography
+geometry
+german
+gym
+health
+history
+home economics
+keyboarding
+language arts
+literature
+mathematics
+military training
+music
+natural history
+organic chemistry
+physical education

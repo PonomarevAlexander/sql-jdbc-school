@@ -1,0 +1,3 @@
+jdbc:h2:~/school
+sa
+1234
